@@ -1,4 +1,4 @@
-﻿using System;
+﻿using heitech.consoleXt.core;
 
 namespace heitech.consoleXt.example
 {
@@ -6,7 +6,8 @@ namespace heitech.consoleXt.example
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            System.Console.WriteLine("running script loop");
+            Skript.Start();
         }
     }
 }
