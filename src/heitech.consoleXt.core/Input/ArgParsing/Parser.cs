@@ -27,6 +27,8 @@ namespace heitech.consoleXt.core.Input.ArgParsing
                 }
                 _current = _current.Transform(_result);
             }
+            // one final transform for the last value in line
+            _ = _current.Transform(_result, isFinal: true);
         }
     }
 
@@ -45,9 +47,9 @@ namespace heitech.consoleXt.core.Input.ArgParsing
                 IsValid = false;
         }
 
-        public IParserState Transform(LineResult result)
+        public IParserState Transform(LineResult result, bool isFinal = false)
         {
-            if (nextState is null) return this;
+            if (nextState is null && !isFinal) return this;
 
             result.CommandName = _builder.ToString();
             return nextState;
@@ -75,7 +77,7 @@ namespace heitech.consoleXt.core.Input.ArgParsing
 
         public bool IsValid { get; private set; } = true;
 
-        public IParserState Transform(LineResult result)
+        public IParserState Transform(LineResult result, bool isFinal = false)
             => nextState is null ? this : nextState;
     }
 
@@ -106,13 +108,13 @@ namespace heitech.consoleXt.core.Input.ArgParsing
                 IsValid = false;
         }
 
-        public IParserState Transform(LineResult result)
+        public IParserState Transform(LineResult result, bool isFinal = false)
             => nextState is null ? this : nextState;
     }
 
     internal class ArgValue : IParserState
     {
-        private readonly StringBuilder _builder;
+        private readonly StringBuilder _builder = new();
         private IParserState nextState = null;
         private readonly string _paramName;
         public ArgValue(char starter, string parameter)
@@ -121,11 +123,11 @@ namespace heitech.consoleXt.core.Input.ArgParsing
             _paramName = parameter;
         }
 
-        public bool IsValid { get; private set; }
+        public bool IsValid { get; private set; } = true;
 
         public void Accept(char next)
         {
-            if (char.IsLetterOrDigit(next))
+            if (char.IsLetterOrDigit(next) || next.Equals(','))
             {
                 _builder.Append(next);
             }
@@ -137,9 +139,9 @@ namespace heitech.consoleXt.core.Input.ArgParsing
                 IsValid = false;
         }
 
-        public IParserState Transform(LineResult result)
+        public IParserState Transform(LineResult result, bool isFinal = false)
         {
-            if (nextState != null)
+            if (nextState != null || isFinal)
             {
                 var param = result.Parameters[_paramName];
                 param.Value = _builder.ToString();
@@ -154,7 +156,7 @@ namespace heitech.consoleXt.core.Input.ArgParsing
     {
         private readonly StringBuilder _builder = new();
         private IParserState nextState = null;
-        public bool IsValid { get; private set; }
+        public bool IsValid { get; private set; } = true;
         public ParameterName(char starter)
             => _builder.Append(starter);
 
@@ -173,9 +175,9 @@ namespace heitech.consoleXt.core.Input.ArgParsing
                 IsValid = false;
         }
 
-        public IParserState Transform(LineResult result)
+        public IParserState Transform(LineResult result, bool isFinal = false)
         {
-            if (nextState is null) return this;
+            if (nextState is null && !isFinal) return this;
 
             result.Parameters.AddParameter(_builder.ToString());
             return nextState;
@@ -186,6 +188,6 @@ namespace heitech.consoleXt.core.Input.ArgParsing
     {
         void Accept(char next);
         bool IsValid { get; }
-        IParserState Transform(LineResult result);
+        IParserState Transform(LineResult result, bool isFinal = false);
     }
 }

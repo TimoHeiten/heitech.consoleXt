@@ -24,14 +24,10 @@ namespace heitech.consoleXt.core.Input
             => $"[{CommandName} && {Parameters?.Format()}]";
 
         public IEnumerator<char> GetEnumerator()
-        {
-            return EnteredLine.GetEnumerator();
-        }
+            => EnteredLine.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+            => GetEnumerator();
 
         public static implicit operator LineResult(string line) => new LineResult(line);
     }

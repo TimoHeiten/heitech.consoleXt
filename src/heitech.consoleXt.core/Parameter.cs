@@ -11,12 +11,28 @@ namespace heitech.consoleXt.core
         public string LongName { get; }
         public string ShortName { get; }
         internal bool IsMandatory { get; set; }
-        internal string Value { get; set; }
+        private string _value;
+        internal string Value
+        {
+            get => _value;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(_value))
+                {
+                    _value = value;
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(value))
+                        _value += $",{value}";
+                }
+            }
+        }
         public Parameter(string sh, string lg, bool isMandatory)
         {
-            IsMandatory = isMandatory;
-            ShortName = sh;
             LongName = lg;
+            ShortName = sh;
+            IsMandatory = isMandatory;
         }
 
         public bool TryParse<T>(Func<string, (T val, bool sccss)> parser, out T result)
@@ -34,10 +50,21 @@ namespace heitech.consoleXt.core
 
         public bool Equals(Parameter other)
         {
-            return other is null 
-                  ? false
-                  : other.ShortName.Equals(ShortName, StringComparison.InvariantCultureIgnoreCase)
-                    && other.LongName.Equals(LongName, StringComparison.InvariantCultureIgnoreCase);
+            if (other is null) return false;
+
+            bool shortNameExists = !string.IsNullOrWhiteSpace(ShortName);
+            bool longNameExists = !string.IsNullOrWhiteSpace(LongName);
+
+            Func<bool> lnEq = () => string.Equals(LongName, other.LongName, StringComparison.OrdinalIgnoreCase);
+            Func<bool> snEq = () => string.Equals(ShortName, other.ShortName, StringComparison.OrdinalIgnoreCase);
+
+            if (shortNameExists && longNameExists)
+                return lnEq() && snEq();
+            else if (longNameExists)
+                return lnEq();
+            else
+                return snEq();
+             
         }
 
         public override int GetHashCode() => LongName.GetHashCode() | ShortName.GetHashCode();
