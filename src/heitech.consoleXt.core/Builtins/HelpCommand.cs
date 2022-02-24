@@ -11,9 +11,7 @@ namespace heitech.consoleXt.core.Builtins
     {
         private readonly IEnumerable<IScript> _scripts;
         public HelpCommand(IEnumerable<IScript> allScripts)
-        {
-            _scripts = allScripts;
-        }
+            => _scripts = allScripts;
 
         public string Name => "help";
 

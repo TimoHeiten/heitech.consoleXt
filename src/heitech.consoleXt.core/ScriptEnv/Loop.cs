@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using heitech.consoleXt.core;
 using heitech.consoleXt.core.Input;
 
 namespace heitech.consoleXt.core.ScriptEnv
@@ -56,8 +55,8 @@ namespace heitech.consoleXt.core.ScriptEnv
             }
         }
 
-        private Task DisplayError(ScriptEnvException exception) 
-            => _outputMap[Outputs.Console].WriteAsync(exception);
+        private Task DisplayError(ScriptEnvException exception)
+            =>_outputMap[Outputs.Console].WriteAsync(exception);
 
         private bool AreAllParametersAllowed(IScript script, ParameterCollection parsedParameters)
         {

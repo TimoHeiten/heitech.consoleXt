@@ -8,12 +8,21 @@ namespace heitech.consoleXt.core.Helpers
     {
         public static string Format(this IScript script)
         {
-            return $"Script [{script.Name} -{script.AcceptedParameters.Format()}]";
+            string formatted = script.Name;
+            string parameters = script.AcceptedParameters.Any() ? $" - {script.AcceptedParameters.Format()}" : "";
+            return $"[{formatted}{parameters}]";
         }
 
         public static string Format(this IEnumerable<Parameter> cltn)
         {
-            return string.Join(" - ", cltn.Select(x => $"'{x.ShortName}->{x.Value}'"));
+            string select(Parameter p)
+            {
+                if (!string.IsNullOrWhiteSpace(p.Value))
+                    return $"'{p.ShortName} | {p.LongName} -> {p.Value}'";
+                else
+                    return $"'{p.ShortName} | {p.LongName}'";
+            }
+            return string.Join(" - ", cltn.Select(select));;
         }
 
     }
