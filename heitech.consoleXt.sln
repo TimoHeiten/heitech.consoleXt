@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E986E8E8-9EC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.consoleXt.core", "src\heitech.consoleXt.core\heitech.consoleXt.core.csproj", "{A25117FF-ABFE-4F8C-AC18-B71B89CC0E60}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CEE66A33-F0EB-4CBB-8373-16EB6336416F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.consoleXt.tests", "tests\heitech.consoleXt.tests\heitech.consoleXt.tests.csproj", "{F56B3BD0-5AC9-4755-A177-56EEE0C9579A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.consoleXt.example", "tests\heitech.consoleXt.example\heitech.consoleXt.example.csproj", "{53E766A2-BE71-4E5D-88F9-D134356457A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,9 +48,22 @@ Global
 		{F56B3BD0-5AC9-4755-A177-56EEE0C9579A}.Release|x64.Build.0 = Release|Any CPU
 		{F56B3BD0-5AC9-4755-A177-56EEE0C9579A}.Release|x86.ActiveCfg = Release|Any CPU
 		{F56B3BD0-5AC9-4755-A177-56EEE0C9579A}.Release|x86.Build.0 = Release|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Debug|x64.Build.0 = Debug|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Debug|x86.Build.0 = Debug|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x64.ActiveCfg = Release|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x64.Build.0 = Release|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A25117FF-ABFE-4F8C-AC18-B71B89CC0E60} = {E986E8E8-9ECE-4D03-98A3-F66A24C9AC03}
 		{F56B3BD0-5AC9-4755-A177-56EEE0C9579A} = {CEE66A33-F0EB-4CBB-8373-16EB6336416F}
+		{53E766A2-BE71-4E5D-88F9-D134356457A9} = {CEE66A33-F0EB-4CBB-8373-16EB6336416F}
 	EndGlobalSection
 EndGlobal
