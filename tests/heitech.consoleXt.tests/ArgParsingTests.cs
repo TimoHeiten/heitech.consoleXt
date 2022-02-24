@@ -145,6 +145,14 @@ namespace heitech.consoleXt.tests
                     new LineResult("pqr -c a -c b -c c"),
                     expected
                 };
+
+                expected = new LineResult("") { CommandName = "s-t-u"};
+                expected.Parameters.AddParameter("cmd_under", "k");
+                yield return new object[]
+                { 
+                    new LineResult("s-t-u --cmd_under k"),
+                    expected
+                };
             }
         }
     }

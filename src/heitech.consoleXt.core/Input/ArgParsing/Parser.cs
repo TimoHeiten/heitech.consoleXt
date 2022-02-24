@@ -30,164 +30,165 @@ namespace heitech.consoleXt.core.Input.ArgParsing
             // one final transform for the last value in line
             _ = _current.Transform(_result, isFinal: true);
         }
-    }
 
-    internal class CommandName : IParserState
-    {
-        private readonly StringBuilder _builder = new();
-        private IParserState nextState = null;
-        public bool IsValid { get; private set; } = true;
-        public void Accept(char next)
+        private abstract class ParserState : IParserState
         {
-            if (char.IsLetterOrDigit(next) || next.Equals('_'))
-                _builder.Append(char.ToLowerInvariant(next));
-            else if (char.IsWhiteSpace(next))
-                nextState = new Whitespace();
-            else
-                IsValid = false;
+            protected readonly StringBuilder _builder = new();
+            protected IParserState nextState = null;
+            public bool IsValid { get; protected set; } = true;
+            public abstract void Accept(char next);
+            public abstract IParserState Transform(LineResult result, bool isFinal = false);
+
+
+            protected bool IsLetter(char next) => char.IsLetterOrDigit(next);
+            protected bool IsUnderScore(char next) => next.Equals('_');
+            protected bool IsHyphen(char next) => next.Equals('-');
+            protected bool IsSpecialCharacter(char next) => char.IsPunctuation(next);
+
+            protected bool IsWhiteSpace(char next) => char.IsWhiteSpace(next);
         }
 
-        public IParserState Transform(LineResult result, bool isFinal = false)
+        private class CommandName : ParserState
         {
-            if (nextState is null && !isFinal) return this;
-
-            result.CommandName = _builder.ToString();
-            return nextState;
-        }
-    }
-
-    internal class Whitespace : IParserState
-    {
-        IParserState nextState = null;
-        private string _followedParamName;
-        public Whitespace(string followedParamName = null)
-            => _followedParamName = followedParamName;
-
-        public void Accept(char next)
-        {
-            if (char.IsWhiteSpace(next))
-                nextState = new Whitespace(); // multiple whitespaces is allowed
-            else if (next.Equals('-'))
-                nextState = new Hyphen();
-            else if (char.IsLetter(next) && _followedParamName != null)
-                nextState = new ArgValue(next, _followedParamName);
-            else
-                IsValid = false;
-        }
-
-        public bool IsValid { get; private set; } = true;
-
-        public IParserState Transform(LineResult result, bool isFinal = false)
-            => nextState is null ? this : nextState;
-    }
-
-    internal class Hyphen : IParserState
-    {
-        private int _hyphenCount;
-        IParserState nextState = null;
-        public Hyphen(int initialCount = 1)
-        {
-            _hyphenCount = initialCount;
-        }
-        public bool IsValid { get; private set; } = true;
-
-        public void Accept(char next)
-        {
-            if (char.IsLetterOrDigit(next))
+            public override void Accept(char next)
             {
-                nextState = new ParameterName(next);
-            }
-            else if (next.Equals('-'))
-            {
-                if (_hyphenCount == 1)
-                    nextState = new Hyphen(2);
+                if (IsLetter(next) || IsUnderScore(next) || IsHyphen(next))
+                    _builder.Append(char.ToLowerInvariant(next));
+                else if (IsWhiteSpace(next))
+                    nextState = new Whitespace();
                 else
-                    IsValid = false; // must not have more than 2 hyphen
+                    IsValid = false;
             }
-            else
-                IsValid = false;
-        }
 
-        public IParserState Transform(LineResult result, bool isFinal = false)
-            => nextState is null ? this : nextState;
-    }
-
-    internal class ArgValue : IParserState
-    {
-        private readonly StringBuilder _builder = new();
-        private IParserState nextState = null;
-        private readonly string _paramName;
-        public ArgValue(char starter, string parameter)
-        {
-            _builder.Append(starter);
-            _paramName = parameter;
-        }
-
-        public bool IsValid { get; private set; } = true;
-
-        public void Accept(char next)
-        {
-            if (char.IsLetterOrDigit(next) || next.Equals(','))
+            public override IParserState Transform(LineResult result, bool isFinal = false)
             {
-                _builder.Append(next);
-            }
-            else if (char.IsWhiteSpace(next))
-            {
-                nextState = new Whitespace();
-            }
-            else
-                IsValid = false;
-        }
+                if (nextState is null && !isFinal) return this;
 
-        public IParserState Transform(LineResult result, bool isFinal = false)
-        {
-            if (nextState != null || isFinal)
-            {
-                var param = result.Parameters[_paramName];
-                param.Value = _builder.ToString();
+                result.CommandName = _builder.ToString();
                 return nextState;
             }
-
-            return this;
         }
-    }
 
-    internal class ParameterName : IParserState
-    {
-        private readonly StringBuilder _builder = new();
-        private IParserState nextState = null;
-        public bool IsValid { get; private set; } = true;
-        public ParameterName(char starter)
-            => _builder.Append(starter);
-
-        public void Accept(char next)
+        private class Whitespace : ParserState
         {
-            if (char.IsLetterOrDigit(next) || next.Equals('_'))
+            private string _followedParamName;
+            public Whitespace(string followedParamName = null)
+                => _followedParamName = followedParamName;
+
+            public override void Accept(char next)
             {
-                _builder.Append(next);
+                if (IsWhiteSpace(next))
+                    nextState = new Whitespace(); // multiple whitespaces is allowed
+                else if (IsHyphen(next))
+                    nextState = new Hyphen();
+                else if (IsLetter(next) && _followedParamName != null)
+                    nextState = new ArgValue(next, _followedParamName);
+                else
+                    IsValid = false;
             }
-            else if (char.IsWhiteSpace(next))
-            {
-                var followedParamName = _builder.ToString();
-                nextState = new Whitespace(followedParamName);
-            }
-            else
-                IsValid = false;
+
+            public override IParserState Transform(LineResult result, bool isFinal = false)
+                => nextState is null ? this : nextState;
         }
 
-        public IParserState Transform(LineResult result, bool isFinal = false)
+        private class Hyphen : ParserState
         {
-            if (nextState is null && !isFinal) return this;
+            private int _hyphenCount;
+            public Hyphen(int initialCount = 1)
+                =>_hyphenCount = initialCount;
 
-            result.Parameters.AddParameter(_builder.ToString());
-            return nextState;
+            public override void Accept(char next)
+            {
+                if (IsLetter(next))
+                {
+                    nextState = new ParameterName(next);
+                }
+                else if (IsHyphen(next))
+                {
+                    if (_hyphenCount == 1)
+                        nextState = new Hyphen(2);
+                    else
+                        IsValid = false; // must not have more than 2 hyphen
+                }
+                else
+                    IsValid = false;
+            }
+
+            public override IParserState Transform(LineResult result, bool isFinal = false)
+                => nextState is null ? this : nextState;
+        }
+
+        private class ArgValue : ParserState
+        {
+            private readonly string _paramName;
+            public ArgValue(char starter, string parameter)
+            {
+                _builder.Append(starter);
+                _paramName = parameter;
+            }
+
+            public override void Accept(char next)
+            {
+                if (IsLetter(next) || next.Equals(','))
+                {
+                    _builder.Append(next);
+                }
+                else if (IsWhiteSpace(next))
+                {
+                    nextState = new Whitespace();
+                }
+                else
+                    IsValid = false;
+            }
+
+            public override IParserState Transform(LineResult result, bool isFinal = false)
+            {
+                if (nextState != null || isFinal)
+                {
+                    var param = result.Parameters[_paramName];
+                    param.Value = _builder.ToString();
+                    return nextState;
+                }
+
+                return this;
+            }
+        }
+
+        private class ParameterName : ParserState
+        {
+            public ParameterName(char starter)
+                => _builder.Append(starter);
+
+            public override void Accept(char next)
+            {
+                if (IsLetter(next) || IsUnderScore(next))
+                {
+                    _builder.Append(next);
+                }
+                else if (IsWhiteSpace(next))
+                {
+                    var followedParamName = _builder.ToString();
+                    nextState = new Whitespace(followedParamName);
+                }
+                else
+                    IsValid = false;
+            }
+
+            public override IParserState Transform(LineResult result, bool isFinal = false)
+            {
+                if (nextState is null && !isFinal) return this;
+
+                result.Parameters.AddParameter(_builder.ToString());
+                return nextState;
+            }
+        }
+
+        internal interface IParserState
+        {
+            void Accept(char next);
+            bool IsValid { get; }
+            IParserState Transform(LineResult result, bool isFinal = false);
         }
     }
 
-    internal interface IParserState
-    {
-        void Accept(char next);
-        bool IsValid { get; }
-        IParserState Transform(LineResult result, bool isFinal = false);
-    }
 }
