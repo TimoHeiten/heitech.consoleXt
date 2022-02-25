@@ -28,6 +28,18 @@ namespace heitech.consoleXt.tests
         }
 
         [Theory]
+        [MemberData(nameof(NonParseableTestData))]
+        public void NonParseable_Commands(LineResult input)
+        {
+            // Arrange
+            // Act
+            input.Parse();
+
+            // Assert
+            input.CommandName.Should().Be("help");
+        }
+
+        [Theory]
         [InlineData("s", "s", true)]
         [InlineData("s", "S", true)]
         [InlineData("S", "s", true)]
@@ -91,39 +103,39 @@ namespace heitech.consoleXt.tests
                 var expected = new LineResult("") { CommandName = "abc" };
                 expected.Parameters.AddParameter("p", "value");
                 yield return new object[]
-                { 
+                {
                     new LineResult("abc -p value"),
                     expected
                 };
 
-                expected = new LineResult("") { CommandName = "def"};
+                expected = new LineResult("") { CommandName = "def" };
                 yield return new object[]
-                { 
+                {
                     new LineResult("def"),
                     expected
                 };
 
-                expected = new LineResult("") { CommandName = "ghi"};
+                expected = new LineResult("") { CommandName = "ghi" };
                 expected.Parameters.AddParameter("longname", "value");
                 yield return new object[]
-                { 
+                {
                     new LineResult("ghi --longname value"),
                     expected
                 };
 
-                expected = new LineResult("") { CommandName = "jkl"};
+                expected = new LineResult("") { CommandName = "jkl" };
                 expected.Parameters.AddParameter("longname", "value");
                 expected.Parameters.AddParameter("l", "short");
                 yield return new object[]
-                { 
+                {
                     new LineResult("jkl --longname value -l short"),
                     expected
                 };
 
-                expected = new LineResult("") { CommandName = "mno"};
+                expected = new LineResult("") { CommandName = "mno" };
                 expected.Parameters.AddParameter("multiple", "a,b,c");
                 yield return new object[]
-                { 
+                {
                     new LineResult("mno --multiple a,b,c "),
                     expected
                 };
@@ -138,22 +150,66 @@ namespace heitech.consoleXt.tests
                     expected
                 };
 
-                expected = new LineResult("") { CommandName = "pqr"};
+                expected = new LineResult("") { CommandName = "pqr" };
                 expected.Parameters.AddParameter("c", "a,b,c");
                 yield return new object[]
-                { 
+                {
                     new LineResult("pqr -c a -c b -c c"),
                     expected
                 };
 
-                expected = new LineResult("") { CommandName = "s-t-u"};
-                expected.Parameters.AddParameter("cmd_under", "k");
+                expected = new LineResult("") { CommandName = "name" };
+                expected.Parameters.AddParameter("parameter", "abc_affe-schnee");
                 yield return new object[]
-                { 
-                    new LineResult("s-t-u --cmd_under k"),
+                {
+                    new LineResult("name --parameter abc_affe-schnee"),
+                    expected
+                };
+                
+                expected = new LineResult("") { CommandName = "name" };
+                expected.Parameters.AddParameter("parameter", "abc affe schnee");
+                yield return new object[]
+                {
+                    new LineResult("name --parameter 'abc affe schnee'"),
                     expected
                 };
             }
+        }
+        public static IEnumerable<object[]> NonParseableTestData
+        {
+            get
+            {
+                yield return new object[]
+                {
+                    new LineResult("_name --parameter abcaffeschnee"),
+                };
+                yield return new object[]
+                {
+                    new LineResult("name --parameter 'abc affe '''schnee'")
+                };
+                yield return new object[]
+                {
+                    new LineResult("name --parameter 'abc affe '''schnee'")
+                };
+                yield return new object[]
+                {
+                    new LineResult("name --parameter _affeschnee")
+                };
+                yield return new object[]
+                {
+                    new LineResult("name --parameter -affeschnee")
+                };
+                yield return new object[]
+                {
+                    new LineResult("name --parameter 2affeschnee")
+                };
+                // todo
+                // -asdad as parameter
+                // number start for all
+                // hyphen start for all
+                // 
+            }
+
         }
     }
 }

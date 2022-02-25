@@ -19,19 +19,19 @@ namespace heitech.consoleXt.core.Input
 
             return Console.ReadLine();
 
-            bool noEnterYet = true;
-            while (noEnterYet)
-            {
-                // todo if key is arrow-up/arrow-down use history
-                // todo if key is tab try autocomplete on script names
-                var key = Console.ReadKey();
-                if (key.Key == ConsoleKey.Enter)
-                    noEnterYet = false;
-                else
-                    builder.Append(key.KeyChar);
-            }
+        //     bool noEnterYet = true;
+        //     while (noEnterYet)
+        //     {
+        //         // todo if key is arrow-up/arrow-down use history
+        //         // todo if key is tab try autocomplete on script names
+        //         var key = Console.ReadKey();
+        //         if (key.Key == ConsoleKey.Enter)
+        //             noEnterYet = false;
+        //         else
+        //             builder.Append(key.KeyChar);
+        //     }
 
-            return builder.ToString();
+        //     return builder.ToString();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace heitech.consoleXt.core.ScriptEnv
             => new ScriptEnvException($"No Script was registered for {result}");
 
         internal static ScriptEnvException ScriptError(IScript script, ParameterCollection collection, Exception ex)
-            => new ScriptEnvException($"{script.Format()} and {collection.Format()} threw:{Environment.NewLine}{ex.Message}", ex);
+            => new ScriptEnvException($"{script.Format()} and {collection.Format()} threw:{Environment.NewLine}{ex.Message}");
 
         internal static ScriptEnvException ArgumentsDoNotMatch(IScript script, ParameterCollection collection)
             => new ScriptEnvException($"One or more ARGS do not match:{Environment.NewLine}{script.Format()} and {collection.Format()}");
