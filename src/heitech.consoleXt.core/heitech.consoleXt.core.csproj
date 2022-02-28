@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-        <_Parameter1>heitech.consoleXt.tests</_Parameter1>
+      <_Parameter1>heitech.consoleXt.tests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-        <_Parameter1>heitech.consoleXt.example</_Parameter1>
+      <_Parameter1>heitech.consoleXt.example</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="ReadLine" Version="2.0.1"/>
+  </ItemGroup>
 </Project>
