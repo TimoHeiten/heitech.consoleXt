@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using heitech.consoleXt.core;
+using heitech.consoleXt.core.Builtins;
 
 namespace heitech.consoleXt.example
 {
@@ -11,16 +12,15 @@ namespace heitech.consoleXt.example
         static void Main(string[] args)
         {
             System.Console.WriteLine("running script loop");
-            Skript.Start(new DisplayScript(), new DemopnstrateIsolation());
+            Skript.Start(prompt: $"timos-shell :>", new DisplayScript(), new DemopnstrateIsolation());
         }
 
-        private class DisplayScript : IScript
+        private class DisplayScript : Script
         {
-            public string Name => "display";
+            public override string Name => "display";
+            public override IEnumerable<Parameter> AcceptedParameters => new Parameter[] { ("c", "content", true)};
 
-            public IEnumerable<Parameter> AcceptedParameters => new Parameter[] { ("c", "content", true)};
-
-            public async Task RunAsync(ParameterCollection collection, OutputHelperMap output)
+            public override async Task RunAsync(ParameterCollection collection, OutputHelperMap output)
             {
                 var needle = AcceptedParameters.Single();
                 var incoming = collection.Single(x => x.Equals(needle));
@@ -28,13 +28,11 @@ namespace heitech.consoleXt.example
             }
         }
 
-        private class DemopnstrateIsolation : IScript
+        private class DemopnstrateIsolation : Script
         {
-            public string Name => "isl";
-
-            public IEnumerable<Parameter> AcceptedParameters => Array.Empty<Parameter>();
-
-            public async Task RunAsync(ParameterCollection collection, OutputHelperMap output)
+            public override string Name => "isl";
+            public override IEnumerable<Parameter> AcceptedParameters => Array.Empty<Parameter>();
+            public override async Task RunAsync(ParameterCollection collection, OutputHelperMap output)
             {
                 await output[Outputs.Console].WriteAsync("demonstrate isolation --> throw exception on purpose");
                 throw new InvalidCastException("cannot cast the parameter here");
