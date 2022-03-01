@@ -5,7 +5,12 @@ namespace heitech.consoleXt.core.Helpers
 {
     public class ConsoleOutputHelper : IOutputHelper
     {
-        static ConsoleColor starter = Console.ForegroundColor;
+        static readonly ConsoleColor starter;
+        static ConsoleOutputHelper()
+        {
+            starter = Console.ForegroundColor;
+        }
+
         public Task WriteAsync(object obj)
         {
             // todo see baisclogger from zer0mqxt, change the console color with regards to the obj type

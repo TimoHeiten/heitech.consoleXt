@@ -1,4 +1,6 @@
 
+using System.Linq;
+
 namespace heitech.consoleXt.core.Input.ArgParsing.States
 {
     internal class ArgValue : ParserState
@@ -16,9 +18,9 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
 
         public override void Accept(char next)
         {
-            if (QuoteMode.IsQuote(next))
+            if (QuoteMode.IsQuote(next) && !(_quoteMode is not null && _quoteMode.IsNested(next)))
             {
-                if (_quoteMode == null)
+                if (_quoteMode is null)
                 {
                     IsValid = false;
                 }
@@ -45,13 +47,16 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
             {
                 _builder.Append(next);
             }
+            else if (IsPassThroughChar(next) && InQuoteMode)
+            {
+                _builder.Append(next);
+            }
             else if (IsWhiteSpace(next))
             {
                 if (InQuoteMode) // else whitespaces are allowed and don´t trigger a state change
                     _builder.Append(next);
                 else
                     nextState = new Whitespace();
-                
             }
             else
                 IsValid = false;
@@ -71,6 +76,12 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
             return this;
         }
 
+        private static char[] allowedOnes = new char[] { '\'', '"', '{', '}', '/', ':', '\\', '?', '!', '.', '$', '€', '|'  };
+        private bool IsPassThroughChar(char next)
+        {
+            return allowedOnes.Any(x => x == next);
+        }
+
     }
     public class QuoteMode
     {
@@ -84,5 +95,7 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
 
         public bool Ended(char next)
             => next.Equals(QuoteChar);
+
+        public bool IsNested(char next) => next != QuoteChar;
     }
 }

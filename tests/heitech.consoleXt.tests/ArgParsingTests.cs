@@ -173,6 +173,30 @@ namespace heitech.consoleXt.tests
                     new LineResult("name --parameter 'abc affe schnee'"),
                     expected
                 };
+
+                expected = new LineResult("") { CommandName = "with-forward-slash" };
+                expected.Parameters.AddParameter("parameter", "abc /affe schnee");
+                yield return new object[]
+                {
+                    new LineResult("with-forward-slash --parameter 'abc /affe schnee'"),
+                    expected
+                };
+
+                expected = new LineResult("") { CommandName = "curly-braces" };
+                expected.Parameters.AddParameter("parameter", "{abc affe schnee}");
+                yield return new object[]
+                {
+                    new LineResult("curly-braces --parameter '{abc affe schnee}'"),
+                    expected
+                };
+
+                expected = new LineResult("") { CommandName = "json" };
+                expected.Parameters.AddParameter("parameter", "{ 'key' : 'value'}");
+                yield return new object[]
+                {
+                    new LineResult("json --parameter \"{ 'key' : 'value'}\""),
+                    expected
+                };
             }
         }
         public static IEnumerable<object[]> NonParseableTestData
@@ -181,7 +205,7 @@ namespace heitech.consoleXt.tests
             {
                 yield return new object[]
                 {
-                    new LineResult("_name --parameter abcaffeschnee"),
+                    new LineResult("2name --parameter abcaffeschnee"),
                 };
                 yield return new object[]
                 {
@@ -195,14 +219,14 @@ namespace heitech.consoleXt.tests
                 {
                     new LineResult("name --parameter _affeschnee")
                 };
-                yield return new object[]
-                {
-                    new LineResult("name --parameter -affeschnee")
-                };
-                yield return new object[]
-                {
-                    new LineResult("name --parameter 2affeschnee")
-                };
+                // yield return new object[]
+                // {
+                //     new LineResult("name --parameter -affeschnee")
+                // };
+                // yield return new object[]
+                // {
+                //     new LineResult("name --parameter 2affeschnee")
+                // };
                 // todo
                 // -asdad as parameter
                 // number start for all
