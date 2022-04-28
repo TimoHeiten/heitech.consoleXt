@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\heitech.consoleXt.core\heitech.consoleXt.core.csproj" />
+    <ProjectReference Include="..\..\src\heitech.consoleXt.basic-scripts\heitech.consoleXt.basic-scripts.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

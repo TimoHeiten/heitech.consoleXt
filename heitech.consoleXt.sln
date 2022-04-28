@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.consoleXt.tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.consoleXt.example", "tests\heitech.consoleXt.example\heitech.consoleXt.example.csproj", "{53E766A2-BE71-4E5D-88F9-D134356457A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.consoleXt.basic-scripts", "src\heitech.consoleXt.basic-scripts\heitech.consoleXt.basic-scripts.csproj", "{E2259AEB-45EB-411B-92DB-D154C7BADEB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +62,23 @@ Global
 		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x64.Build.0 = Release|Any CPU
 		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x86.ActiveCfg = Release|Any CPU
 		{53E766A2-BE71-4E5D-88F9-D134356457A9}.Release|x86.Build.0 = Release|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Debug|x64.Build.0 = Debug|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Debug|x86.Build.0 = Debug|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Release|x64.ActiveCfg = Release|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Release|x64.Build.0 = Release|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Release|x86.ActiveCfg = Release|Any CPU
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A25117FF-ABFE-4F8C-AC18-B71B89CC0E60} = {E986E8E8-9ECE-4D03-98A3-F66A24C9AC03}
 		{F56B3BD0-5AC9-4755-A177-56EEE0C9579A} = {CEE66A33-F0EB-4CBB-8373-16EB6336416F}
 		{53E766A2-BE71-4E5D-88F9-D134356457A9} = {CEE66A33-F0EB-4CBB-8373-16EB6336416F}
+		{E2259AEB-45EB-411B-92DB-D154C7BADEB1} = {E986E8E8-9ECE-4D03-98A3-F66A24C9AC03}
 	EndGlobalSection
 EndGlobal

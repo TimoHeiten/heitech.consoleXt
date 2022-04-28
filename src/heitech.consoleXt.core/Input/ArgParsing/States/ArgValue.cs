@@ -39,7 +39,7 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
             {
                 if (!canUse.Value)
                     IsValid = false;
-                
+
                 return;
             }
 
@@ -76,26 +76,10 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
             return this;
         }
 
-        private static char[] allowedOnes = new char[] { '\'', '"', '{', '}', '/', ':', '\\', '?', '!', '.', '$', '€', '|'  };
+        private static char[] allowedOnes = new char[] { '\'', '"', '{', '}', '/', ':', '\\', '?', '!', '.', '$', '€', '|' };
         private bool IsPassThroughChar(char next)
         {
             return allowedOnes.Any(x => x == next);
         }
-
-    }
-    public class QuoteMode
-    {
-        private char QuoteChar;
-        public static QuoteMode Enter(char quoteChar) => new QuoteMode(quoteChar);
-        private QuoteMode(char quoteChar)
-            => QuoteChar = quoteChar;
-
-        internal static bool IsQuote(char next)
-            => next.Equals('\'') || next.Equals('"');
-
-        public bool Ended(char next)
-            => next.Equals(QuoteChar);
-
-        public bool IsNested(char next) => next != QuoteChar;
     }
 }

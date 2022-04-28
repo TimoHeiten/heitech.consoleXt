@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,6 +23,5 @@ namespace heitech.consoleXt.core.Helpers
             }
             return string.Join(" - ", cltn.Select(select));;
         }
-
     }
 }

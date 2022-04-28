@@ -7,6 +7,9 @@ namespace heitech.consoleXt.core.Input.ArgParsing
     {
         void Accept(char next);
         bool IsValid { get; }
+        ///<summary>
+        /// Find the next correct State during the parsing stage 
+        ///</summary>
         IParserState Transform(LineResult result, bool isFinal = false);
     }
 

@@ -6,6 +6,9 @@ using heitech.consoleXt.core.Input.ArgParsing.States;
 
 namespace heitech.consoleXt.core.Input
 {
+    ///<summary>
+    /// represents the current Line that will be used as input
+    ///</summary>
     public class LineResult : IEnumerable<char>
     {
         internal string CommandName { get; set; }
@@ -15,13 +18,21 @@ namespace heitech.consoleXt.core.Input
         internal LineResult(string actualLine)
             => EnteredLine = actualLine;
 
+        ///<summary>
+        /// Try to make sense of the contents of the line and interpret as command
+        ///</summary>
         internal void Parse()
         {
             IParserState _current = new CommandName();
             List<char> parsedCorrectly = new();
-            foreach (var c in this)
+
+            foreach (var character in this)
             {
-                _current.Accept(c);
+                if (character == '\0')
+                    continue;
+
+                _current.Accept(character);
+                parsedCorrectly.Add(character);
                 if (!_current.IsValid)
                 {
                     this.CommandName = "help";
@@ -30,9 +41,9 @@ namespace heitech.consoleXt.core.Input
                     this.Parameters = new ParameterCollection(parameter);
                     return;
                 }
-                parsedCorrectly.Add(c);
                 _current = _current.Transform(this);
             }
+
             // one final transform for the last value in line
             _ = _current.Transform(this, isFinal: true);
         }
@@ -46,6 +57,7 @@ namespace heitech.consoleXt.core.Input
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
-        public static implicit operator LineResult(string line) => new LineResult(line);
+        public static implicit operator LineResult(string line) 
+            => new LineResult(line);
     }
 }

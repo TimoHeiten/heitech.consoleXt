@@ -10,7 +10,8 @@ namespace heitech.consoleXt.core
     {
         public string LongName { get; }
         public string ShortName { get; }
-        internal bool IsMandatory { get; set; }
+        internal bool IsMandatory { get; }
+
         private string _value;
         internal string Value
         {
@@ -28,20 +29,28 @@ namespace heitech.consoleXt.core
                 }
             }
         }
-        public Parameter(string sh, string lg, bool isMandatory)
+        public Parameter(string sh, string lg, bool isMandatory = false)
         {
             LongName = lg;
             ShortName = sh;
             IsMandatory = isMandatory;
         }
 
-        public bool TryParse<T>(Func<string, (T val, bool sccss)> parser, out T result)
+        ///<summary>
+        /// Tries to parse the internal value with respect to the supplied parse callback.
+        ///</summary>
+        public static bool TryParse<T>(Parameter me, Func<string, (T val, bool sccss)> parser, out T result)
         {
             result = default;
-            var tpl = parser(Value);
-            if (tpl.sccss)
+
+            if (me is null || parser is null)
+                return false;
+
+            result = default;
+            var (val, sccss) = parser(me.Value);
+            if (sccss)
             {
-                result = tpl.val;
+                result = val;
                 return true;
             }
 
@@ -55,8 +64,8 @@ namespace heitech.consoleXt.core
             bool shortNameExists = !string.IsNullOrWhiteSpace(ShortName);
             bool longNameExists = !string.IsNullOrWhiteSpace(LongName);
 
-            Func<bool> lnEq = () => string.Equals(LongName, other.LongName, StringComparison.OrdinalIgnoreCase);
-            Func<bool> snEq = () => string.Equals(ShortName, other.ShortName, StringComparison.OrdinalIgnoreCase);
+            bool lnEq() => string.Equals(LongName, other.LongName, StringComparison.OrdinalIgnoreCase);
+            bool snEq() => string.Equals(ShortName, other.ShortName, StringComparison.OrdinalIgnoreCase);
 
             if (shortNameExists && longNameExists)
                 return lnEq() && snEq();
@@ -67,7 +76,8 @@ namespace heitech.consoleXt.core
              
         }
 
-        public override int GetHashCode() => LongName.GetHashCode() | ShortName.GetHashCode();
+        public override int GetHashCode() 
+            => LongName.GetHashCode() | ShortName.GetHashCode();
 
         public static implicit operator Parameter((string _short, string _long, bool mandatory) definition)
              => new Parameter(definition._short, definition._long, definition.mandatory);

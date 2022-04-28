@@ -14,7 +14,7 @@ namespace heitech.consoleXt.core.Builtins
         internal KillCommand(LoopContext context) => this.context = context;
         public async Task RunAsync(ParameterCollection collection, OutputHelperMap output)
         {
-            await output[Outputs.Console].WriteAsync($"EXEC - {this.Format()}");
+            await output[OutputHelperMap.Console].WriteAsync($"EXEC - {this.Format()}");
             context.StopAlive();
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +29,7 @@ namespace heitech.consoleXt.core.Builtins
 
             _scripts.ToList().ForEach(x => builder.AppendLine(x.Format()));
 
-            return output[Outputs.Console].WriteAsync(builder.ToString());
+            return output[OutputHelperMap.Console].WriteAsync(builder.ToString());
         }
     }
 }
