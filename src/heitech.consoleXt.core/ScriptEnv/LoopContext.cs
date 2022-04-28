@@ -5,10 +5,7 @@ namespace heitech.consoleXt.core.ScriptEnv
     {
         private bool _isAlive = true;
         internal bool IsAlive => _isAlive;
-        internal LoopContext()
-        {
-
-        }
+        internal LoopContext() { }
 
         internal void StopAlive() => _isAlive = false;
 

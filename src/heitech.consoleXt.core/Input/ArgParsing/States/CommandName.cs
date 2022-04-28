@@ -1,5 +1,3 @@
-using System;
-
 namespace heitech.consoleXt.core.Input.ArgParsing.States
 {
     internal class CommandName : ParserState
@@ -18,17 +16,29 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
                     _builder.Append(next);
                 }
             }
+            //else if (char.IsDigit(next) && _builder.Length == 0)
+            //{
+            //    IsValid = false;
+            //}
             else if (IsAllowedLetterOrDigit(next) || IsUnderScore(next) || IsHyphen(next))
+            {
                 _builder.Append(next);
-            else if (IsWhiteSpace(next))
+            }
+            else if (IsWhiteSpace(next) && _builder.Length > 0)
+            {
                 nextState = new Whitespace();
+            }
             else
-                IsValid = false;
+            {
+                if (_builder.Length > 0)
+                    IsValid = false;
+            }
         }
 
         public override IParserState Transform(LineResult result, bool isFinal = false)
         {
-            if (nextState is null && !isFinal) return this;
+            if (nextState is null && !isFinal) 
+                return this;
 
             result.CommandName = _builder.ToString();
             return nextState;

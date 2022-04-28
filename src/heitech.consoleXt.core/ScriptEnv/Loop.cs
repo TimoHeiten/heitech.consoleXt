@@ -6,7 +6,7 @@ using heitech.consoleXt.core.Input;
 
 namespace heitech.consoleXt.core.ScriptEnv
 {
-    public class Loop
+    internal class Loop
     {
         private readonly LoopContext _context;
         private readonly IInputReader _reader;
@@ -56,7 +56,7 @@ namespace heitech.consoleXt.core.ScriptEnv
         }
 
         private Task DisplayError(ScriptEnvException exception)
-            =>_outputMap[Outputs.Console].WriteAsync(exception);
+            =>_outputMap[OutputHelperMap.Console].WriteAsync(exception);
 
         private bool AreAllParametersAllowed(IScript script, ParameterCollection parsedParameters)
         {

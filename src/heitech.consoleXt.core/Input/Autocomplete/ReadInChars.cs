@@ -8,7 +8,6 @@ namespace heitech.consoleXt.core.Input.Autocomplete
     public class ReadInChars : IInputReader
     {
         private readonly string _prompt;
-        private readonly IEnumerable<IScript> _scripts;
         public ReadInChars(IEnumerable<IScript> scripts, string prompt)
         {
             _prompt = prompt;
@@ -36,15 +35,13 @@ namespace heitech.consoleXt.core.Input.Autocomplete
             {
                 var cmdStartsWith = _scripts.FirstOrDefault(x => x.Name.StartsWith(text));
                 var cmd = _scripts.FirstOrDefault(x => text.StartsWith(x.Name));
+
                 if (cmd is not null)
-                {
                     return ToFlatArray(cmd, text, index);
-                }
                 else if (cmdStartsWith is not null)
-                {
                     return new[] { $"{cmdStartsWith.Name}" };
-                }
-                else return _scripts.Select(x => x.Name).ToArray();
+                else 
+                    return _scripts.Select(x => x.Name).ToArray();
             }
 
             private string[] ToFlatArray(IScript script, string text, int index)

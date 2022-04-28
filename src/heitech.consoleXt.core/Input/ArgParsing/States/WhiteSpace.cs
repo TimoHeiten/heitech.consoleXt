@@ -15,7 +15,7 @@ namespace heitech.consoleXt.core.Input.ArgParsing.States
                 nextState = new Whitespace(); // multiple whitespaces is allowed
             else if (IsHyphen(next))
                 nextState = new Hyphen();
-            else if (_followedParamName != null)
+            else if (_followedParamName is not null)
             {
                 if (IsAllowedLetterOrDigit(next))
                 {
